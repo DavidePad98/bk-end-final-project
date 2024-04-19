@@ -53,9 +53,5 @@ public class EventsController {
         if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
         else return es.findByIdAndUpdate(id, payload);
     }
-//    @PutMapping("{id}/users/{userId}")
-//    @PreAuthorize("hasAuthority('EVENT_MANAGER')")
-//    public Events addUserToEvent(@PathVariable long id, @PathVariable long userId) {
-//        return es.addUserToEvent(id, userId);
-//    }
+
 }
