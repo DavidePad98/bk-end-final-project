@@ -22,29 +22,15 @@ public class AuthorizationController {
     @Autowired
     private UserServices us;
 
-    @Autowired
-    private EventsServices es;
-
     @PostMapping("/login")
     public UserLogResponseDTO login(@RequestBody newUserLog payload){
         return new UserLogResponseDTO(this.authorService.authenticateUserAndGenerateToken(payload));
     }
-//    @PostMapping("/login")
-//    public UserLogResponseDTO login(@RequestBody newUserLog payload){
-//        return authorService.authenticateUserAndGenerateToken(payload);
-//    }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     private newUserResponseDTO saveEmployee(@RequestBody @Validated UserDTO payload, BindingResult validation) {
         if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
         return new newUserResponseDTO(this.us.save(payload).getId());
-    }
-
-    @PostMapping("events/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    private Events saveNewEvents(@RequestBody @Validated EventsDTO payload, BindingResult validation) {
-        if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
-        else return es.save(payload);
     }
 }

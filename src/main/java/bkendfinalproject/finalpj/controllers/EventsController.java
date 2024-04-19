@@ -7,6 +7,7 @@ import bkendfinalproject.finalpj.services.EventsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +32,14 @@ public class EventsController {
         return es.findById(id);
     }
 
+    @PostMapping("/register")
+    @PreAuthorize("hasAuthority('ORGANIZATOR')")
+    @ResponseStatus(HttpStatus.CREATED)
+    private Events saveNewEvents(@RequestBody @Validated EventsDTO payload, BindingResult validation) {
+        if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
+        else return es.save(payload);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZATOR')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -43,5 +52,10 @@ public class EventsController {
     private Events updateEvents(@PathVariable long id, @RequestBody @Validated EventsDTO payload, BindingResult validation) {
         if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
         else return es.findByIdAndUpdate(id, payload);
+    }
+    @PutMapping("{id}/users/{userId}")
+    @PreAuthorize("hasAuthority('EVENT_MANAGER')")
+    public Events addUserToEvent(@PathVariable long id, @PathVariable long userId) {
+        return es.addUserToEvent(id, userId);
     }
 }

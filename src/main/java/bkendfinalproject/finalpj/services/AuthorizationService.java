@@ -20,15 +20,6 @@ public class AuthorizationService {
     @Autowired
     private PasswordEncoder bcrypt;
 
-//    public UserLogResponseDTO authenticateUserAndGenerateToken(newUserLog payload) {
-//        User user = this.us.findByEmail(payload.email());
-//        if (bcrypt.matches(payload.password(), user.getPassword())) {
-//            return new UserLogResponseDTO(jwtTools.createToken(user));
-//        } else {
-//            throw new UnauthorizedException("Credenziali non valide! Effettua di nuovo il login!");
-//        }
-//    }
-
     public String authenticateUserAndGenerateToken(newUserLog payload) {
         User user = this.us.findByEmail(payload.email());
         if (bcrypt.matches(payload.password(), user.getPassword())) {

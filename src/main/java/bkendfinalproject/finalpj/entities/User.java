@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,8 +31,7 @@ public class User implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    @OneToMany(mappedBy = "utente_id")
-    private List<Prenotations> prenotazioni;
+
 
     public User(String username, String password, String email, UserRole role) {
         this.username = username;

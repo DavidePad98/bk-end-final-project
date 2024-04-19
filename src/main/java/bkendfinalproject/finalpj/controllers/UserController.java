@@ -4,7 +4,7 @@ import bkendfinalproject.finalpj.entities.Events;
 import bkendfinalproject.finalpj.entities.User;
 import bkendfinalproject.finalpj.exceptions.BadRequestException;
 import bkendfinalproject.finalpj.payloads.EventsDTO;
-import bkendfinalproject.finalpj.payloads.UserDTO;
+import bkendfinalproject.finalpj.services.EventsServices;
 import bkendfinalproject.finalpj.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +22,9 @@ public class UserController {
     @Autowired
     private UserServices us;
 
+    @Autowired
+    private EventsServices es;
+
     @GetMapping
     private Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "10") int size,
@@ -34,6 +37,13 @@ public class UserController {
         return us.findById(id);
     }
 
+    @PostMapping("events/register")
+    @PreAuthorize("hasAuthority('ORGANIZATOR')")
+    @ResponseStatus(HttpStatus.CREATED)
+    private Events saveNewEvents(@RequestBody @Validated EventsDTO payload, BindingResult validation) {
+        if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
+        else return es.save(payload);
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -46,7 +56,6 @@ public class UserController {
     public User getProfile(@AuthenticationPrincipal User currentAuthenticatedUser){
         return currentAuthenticatedUser;
     }
-
 
     @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)

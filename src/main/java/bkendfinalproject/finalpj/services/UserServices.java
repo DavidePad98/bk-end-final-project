@@ -51,7 +51,6 @@ public class UserServices {
         uDAO.delete(found);
     }
 
-
     public User findByEmail(String email){
         return uDAO.findByEmail(email).orElseThrow(() -> new NotFoundException("user non trovato"));
     }

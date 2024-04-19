@@ -1,11 +1,10 @@
 package bkendfinalproject.finalpj.services;
 
 import bkendfinalproject.finalpj.dao.EventsDAO;
-import bkendfinalproject.finalpj.dao.PrenotazioniDAO;
 import bkendfinalproject.finalpj.dao.UserDAO;
 import bkendfinalproject.finalpj.entities.Events;
-import bkendfinalproject.finalpj.entities.Prenotations;
 import bkendfinalproject.finalpj.entities.User;
+import bkendfinalproject.finalpj.exceptions.BadRequestException;
 import bkendfinalproject.finalpj.exceptions.NotFoundException;
 import bkendfinalproject.finalpj.payloads.EventsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 @Service
 public class EventsServices {
 
@@ -25,9 +22,6 @@ public class EventsServices {
 
     @Autowired
     private UserServices us;
-
-    @Autowired
-    private PrenotazioniDAO pDAO;
 
     @Autowired
     private UserDAO uDAO;
@@ -68,27 +62,17 @@ public class EventsServices {
         return found;
     }
 
-    public void prenotaEvento(Long eventoId, Long userId, int postiPrenotati) {
-        Events evento = eDAO.findById(eventoId)
-                .orElseThrow(() -> new IllegalArgumentException("Evento non trovato"));
-
-        User utente = uDAO.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
-
-        int postiDisponibili = evento.getPostiDisponibili();
-
-        if (postiPrenotati > postiDisponibili) {
-            throw new IllegalArgumentException("Posti non disponibili");
+    public Events addUserToEvent(long eventId, long userId) {
+        Events event = this.getEvents(eventId);
+        User user = this.us.getUsers(userId);
+        if (event.getUsers().contains(user)) {
+            throw new BadRequestException("ok");
         }
-
-        Prenotations prenotazione = new Prenotations();
-        prenotazione.setEvento(evento);
-        prenotazione.setUtente(utente);
-        prenotazione.setPostiPrenotati(postiPrenotati);
-
-        evento.setPostiDisponibili(postiDisponibili - postiPrenotati);
-
-        pDAO.save(prenotazione);
-        eDAO.save(evento);
+        if (event.getPostiDisponibili() == 0) {
+            throw new BadRequestException("Nessun posto rimasto");
+        }
+        event.getUsers().add(user);
+        return eDAO.save(event);
     }
+
 }

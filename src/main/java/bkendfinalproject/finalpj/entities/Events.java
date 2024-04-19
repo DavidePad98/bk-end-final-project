@@ -1,10 +1,7 @@
 package bkendfinalproject.finalpj.entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "events")
 public class Events {
     @Id
@@ -26,8 +24,14 @@ public class Events {
     private LocalDate data;
     private String luogo;
     private int postiDisponibili;
-    @OneToMany(mappedBy = "evento_id")
-    private List<Prenotations> prenotazioni = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "event_user",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
 
     public Events(String titolo, String descrizione, LocalDate data, String luogo, int postiDisponibili) {
         this.titolo = titolo;
