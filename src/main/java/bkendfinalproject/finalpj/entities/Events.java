@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,4 +26,14 @@ public class Events {
     private LocalDate data;
     private String luogo;
     private int postiDisponibili;
+    @OneToMany(mappedBy = "evento_id")
+    private List<Prenotations> prenotazioni = new ArrayList<>();
+
+    public Events(String titolo, String descrizione, LocalDate data, String luogo, int postiDisponibili) {
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.data = data;
+        this.luogo = luogo;
+        this.postiDisponibili = postiDisponibili;
+    }
 }

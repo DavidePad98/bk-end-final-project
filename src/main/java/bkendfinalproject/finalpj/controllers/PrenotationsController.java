@@ -1,9 +1,11 @@
 package bkendfinalproject.finalpj.controllers;
 
 import bkendfinalproject.finalpj.entities.Events;
+import bkendfinalproject.finalpj.entities.Prenotations;
 import bkendfinalproject.finalpj.exceptions.BadRequestException;
 import bkendfinalproject.finalpj.payloads.EventsDTO;
 import bkendfinalproject.finalpj.services.EventsServices;
+import bkendfinalproject.finalpj.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -13,34 +15,37 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/events")
-public class EventsController {
+@RequestMapping("/prenot")
+public class PrenotationsController {
 
     @Autowired
     private EventsServices es;
 
+    @Autowired
+    private UserServices us;
+
     @GetMapping
-    private Page<Events> getAllEvents(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       @RequestParam(defaultValue = "id") String sort) {
-        return es.getEvents(page, size, sort);
+    private Page<Prenotations> getAllPrenotations(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size,
+                                      @RequestParam(defaultValue = "id") String sort) {
+        return es.(page, size, sort);
     }
 
     @GetMapping("/{id}")
-    private Events getEventsById(@PathVariable long id) {
+    private Prenotations getPrenotationsById(@PathVariable long id) {
         return es.findById(id);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZATOR')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void deleteEvents(@PathVariable long id) {
+    private void deletePrenotations(@PathVariable long id) {
         es.findByIdAndDelete(id);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ORGANIZATOR')")
-    private Events updateEvents(@PathVariable long id, @RequestBody @Validated EventsDTO payload, BindingResult validation) {
+    private Prenotations updatePrenotations(@PathVariable long id, @RequestBody @Validated EventsDTO payload, BindingResult validation) {
         if (validation.hasErrors()) throw new BadRequestException(validation.getAllErrors());
         else return es.findByIdAndUpdate(id, payload);
     }

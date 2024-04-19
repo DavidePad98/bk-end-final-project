@@ -10,7 +10,7 @@ public record UserDTO(
         @Size(min = 2, max = 30, message = "il titolo deve contenere da un minimo di 2 caratteri and un massimo di 30")
         String username,
 
-                               @NotEmpty(message = "devi mettere un titolo all'evento")
+        @NotEmpty(message = "devi mettere un titolo all'evento")
         @Size(min = 2, max = 30, message = "il titolo deve contenere da un minimo di 2 caratteri and un massimo di 30")
         String password,
 
@@ -18,6 +18,4 @@ public record UserDTO(
         @Email(message = "L'email inserita non è valida")
         String email,
 
-        @NotEmpty(message = "devi mettere un titolo all'evento")
-        @Size(min = 2, max = 30, message = "il titolo deve contenere da un minimo di 2 caratteri and un massimo di 30")
         UserRole role) {}

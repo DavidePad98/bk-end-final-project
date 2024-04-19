@@ -30,8 +30,8 @@ public class UserServices {
         );
         User newUser = new User(
                 user.username(),
-                user.email(),
                 bcrypt.encode(user.password()),
+                user.email(),
                 user.role());
         return uDAO.save(newUser);
     }
@@ -53,7 +53,7 @@ public class UserServices {
 
 
     public User findByEmail(String email){
-        return uDAO.findByEmail(email).orElseThrow(() -> new NotFoundException("Dipendente non trovato"));
+        return uDAO.findByEmail(email).orElseThrow(() -> new NotFoundException("user non trovato"));
     }
 
 }
