@@ -62,17 +62,17 @@ public class EventsServices {
         return found;
     }
 
-    public Events addUserToEvent(long eventId, long userId) {
-        Events event = this.getEvents(eventId);
-        User user = this.us.getUsers(userId);
-        if (event.getUsers().contains(user)) {
-            throw new BadRequestException("ok");
-        }
-        if (event.getPostiDisponibili() == 0) {
-            throw new BadRequestException("Nessun posto rimasto");
-        }
-        event.getUsers().add(user);
-        return eDAO.save(event);
-    }
+//    public Events addUserToEvent(long eventId, long userId) {
+//        Events event = this.getEvents(eventId);
+//        User user = this.us.getUsers(userId);
+//        if (event.getUsers().contains(user)) {
+//            throw new BadRequestException("ok");
+//        }
+//        if (event.getPostiDisponibili() == 0) {
+//            throw new BadRequestException("Nessun posto rimasto");
+//        }
+//        event.getUsers().add(user);
+//        return eDAO.save(event);
+//    }
 
 }

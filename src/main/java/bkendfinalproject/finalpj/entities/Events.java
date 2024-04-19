@@ -1,5 +1,6 @@
 package bkendfinalproject.finalpj.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,13 +25,9 @@ public class Events {
     private LocalDate data;
     private String luogo;
     private int postiDisponibili;
-    @ManyToMany
-    @JoinTable(
-            name = "event_user",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users;
+    @OneToMany(mappedBy = "evento")
+    @JsonIgnore
+    private List<Prenotations> prenotazioni;
 
 
     public Events(String titolo, String descrizione, LocalDate data, String luogo, int postiDisponibili) {
